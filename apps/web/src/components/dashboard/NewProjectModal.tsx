@@ -1,0 +1,16 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { TEMPLATES } from '@sitebuilder/shared';
+import type { Project } from '@sitebuilder/shared/types';
+import { ArrowUpRight, FilePlus2, LayoutTemplate } from 'lucide-react';
+import { api, apiError } from '../../lib/api';
+import { useI18n } from '../../lib/i18n';
+import { useInvalidate } from '../../lib/data';
+import { Button, Input, Modal, Field, Select, useToast } from '../ui';
+export function NewProjectModal({ open, onClose, templateId }: { open: boolean; onClose: () => void; templateId?: string }) {
+  const { t } = useI18n(); const { toast } = useToast(); const navigate = useNavigate(); const invalidate = useInvalidate();
+  const [name, setName] = useState(''); const [template, setTemplate] = useState(templateId || ''); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
+  useEffect(() => { if (open) { setTemplate(templateId || ''); setName(''); setError(''); } }, [open, templateId]);
+  const submit = async (event: React.FormEvent) => { event.preventDefault(); setBusy(true); setError(''); try { const { project } = await api<{ project: Project }>('/projects', { method: 'POST', body: JSON.stringify({ name: name.trim(), ...(template ? { templateId: template } : {}) }) }); invalidate(); toast(t('Project created. Make it yours.', 'Projekt utworzony. Nadaj mu swój styl.'), 'success'); onClose(); navigate(`/editor/${project.id}`); } catch (error) { setError(apiError(error)); } finally { setBusy(false); } };
+  return <Modal open={open} onClose={() => !busy && onClose()} title={t('Start something extraordinary', 'Zacznij coś wyjątkowego')}><form onSubmit={submit} className="form-stack"><p className="muted">{t('Every great website starts with an idea. What is yours?', 'Każda świetna strona zaczyna się od pomysłu. Jaki jest Twój?')}</p><Field label={t('Project name', 'Nazwa projektu')}><Input value={name} onChange={e => setName(e.target.value)} required maxLength={100} placeholder={t('e.g. My creative studio', 'np. Moje studio kreatywne')} autoFocus /></Field><div className="choice-grid"><button type="button" className={`choice-card ${!template ? 'selected' : ''}`} onClick={() => setTemplate('')}><FilePlus2 size={24} /><strong>{t('Blank canvas', 'Czysta karta')}</strong><span>{t('Build your own vision', 'Zbuduj własną wizję')}</span></button><button type="button" className={`choice-card ${template ? 'selected' : ''}`} onClick={() => setTemplate(TEMPLATES[0]?.id || '')}><LayoutTemplate size={24} /><strong>{t('From a template', 'Z szablonu')}</strong><span>{t('A beautiful head start', 'Piękny punkt wyjścia')}</span></button></div>{template && <Field label={t('Choose your starting point', 'Wybierz punkt wyjścia')}><Select value={template} onChange={e => setTemplate(e.target.value)}>{TEMPLATES.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</Select></Field>}{error && <div className="inline-error" role="alert">{error}</div>}<div className="form-actions"><Button variant="ghost" onClick={onClose} disabled={busy}>{t('Cancel', 'Anuluj')}</Button><Button type="submit" loading={busy} disabled={!name.trim()}>{t('Create project', 'Utwórz projekt')}<ArrowUpRight size={16} /></Button></div></form></Modal>;
+}

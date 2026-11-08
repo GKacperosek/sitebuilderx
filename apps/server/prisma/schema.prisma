@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String @id @default(uuid())
+  email        String @unique
+  passwordHash String
+  name         String
+  avatar       String?
+  language     String @default("pl")
+  settings     Json @default("{}")
+  createdAt    DateTime @default(now())
+  sessions     Session[]
+  resets       PasswordReset[]
+  projects     Project[]
+  assets       MediaAsset[]
+  folders      MediaFolder[]
+  activities   Activity[]
+  domains      Domain[]
+  components   SavedComponent[]
+}
+
+model Session {
+  id         String @id @default(uuid())
+  tokenHash  String @unique
+  userId     String
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent  String
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  expiresAt  DateTime
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordReset {
+  id        String @id @default(uuid())
+  tokenHash String @unique
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  @@index([expiresAt])
+}
+
+model Project {
+  id                String @id @default(uuid())
+  userId            String
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  description       String @default("")
+  document          Json
+  revision          Int @default(1)
+  thumbnail         String?
+  publishedSlug     String? @unique
+  publishedDocument Json?
+  publishedAt       DateTime?
+  deletedAt         DateTime?
+  analyticsSalt     String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  versions          ProjectVersion[]
+  domains           Domain[]
+  submissions       Submission[]
+  views             PageView[]
+  @@index([userId, deletedAt])
+}
+
+model ProjectVersion {
+  id        String @id @default(uuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  label     String
+  document  Json
+  revision  Int
+  automatic Boolean @default(false)
+  createdAt DateTime @default(now())
+  @@index([projectId, createdAt])
+}
+
+model MediaAsset {
+  id        String @id @default(uuid())
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  filename  String @unique
+  mimeType  String
+  size      Int
+  folder    String @default("")
+  createdAt DateTime @default(now())
+  @@index([userId, folder])
+}
+
+model MediaFolder {
+  id     String @id @default(uuid())
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+  @@unique([userId, name])
+}
+
+model Activity {
+  id        String @id @default(uuid())
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  detail    String
+  projectId String?
+  createdAt DateTime @default(now())
+  @@index([userId, createdAt])
+}
+
+model Domain {
+  id        String @id @default(uuid())
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  hostname  String @unique
+  verified  Boolean @default(false)
+  token     String
+  createdAt DateTime @default(now())
+  @@index([userId])
+}
+
+model Submission {
+  id        String @id @default(uuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  pageSlug  String
+  formName  String
+  data      Json
+  createdAt DateTime @default(now())
+  @@index([projectId, createdAt])
+}
+
+model PageView {
+  id          String @id @default(uuid())
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  path        String
+  visitorHash String
+  device      String
+  date        String
+  createdAt   DateTime @default(now())
+  @@index([projectId, date])
+  @@index([projectId, visitorHash])
+}
+
+model SavedComponent {
+  id        String @id @default(uuid())
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  spec      Json
+  createdAt DateTime @default(now())
+  @@index([userId])
+}

@@ -1,0 +1,80 @@
+import type { ElementCategory, ElementDefinition, NodeProps, NodeSpec, StyleMap } from './types';
+
+const photo = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85';
+const definitions: ElementDefinition[] = [];
+function add(type: string, label: string, labelPl: string, category: ElementCategory, allowsChildren: boolean, defaultProps: NodeProps = {}, defaultStyles: StyleMap = {}, icon = 'square') {
+  definitions.push({ type, label, labelPl, category, icon, allowsChildren, defaultProps, defaultStyles });
+}
+add('heading', 'Heading', 'Nagłówek', 'text', false, { text: 'Build something extraordinary.', level: 2 }, { fontSize: 48, fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.04em' }, 'type');
+add('paragraph', 'Paragraph', 'Akapit', 'text', false, { text: 'Thoughtful design. Powerful ideas. A new way to bring your vision to life.' }, { fontSize: 18, lineHeight: 1.7, color: 'var(--sb-muted)' }, 'align-left');
+add('richText', 'Rich text', 'Tekst formatowany', 'text', false, { html: '<p>Your story starts with <strong>one great idea.</strong></p>' }, { lineHeight: 1.7 }, 'text-cursor');
+add('text', 'Text', 'Tekst', 'text', false, { text: 'Made for what comes next.' }, {}, 'type');
+add('quote', 'Quote', 'Cytat', 'text', true, { text: 'Great things happen when people and ideas come together.', author: 'Alex Morgan' }, { borderLeft: '3px solid var(--sb-primary)', padding: 24, fontSize: 24 }, 'quote');
+add('link', 'Link', 'Odnośnik', 'text', true, { text: 'Learn more', href: '#', target: '_self' }, { color: 'var(--sb-primary)' }, 'link');
+add('list', 'Bullet list', 'Lista punktowana', 'text', true, { items: ['Designed with purpose', 'Built for everyone', 'Ready to grow'] }, { lineHeight: 1.9 }, 'list');
+add('numberedList', 'Numbered list', 'Lista numerowana', 'text', true, { items: ['Discover', 'Create', 'Launch'] }, { lineHeight: 1.9 }, 'list-ordered');
+add('badge', 'Badge', 'Odznaka', 'text', false, { text: 'NEW COLLECTION' }, { fontSize: 12, letterSpacing: '0.12em', fontWeight: 700, borderRadius: 999, padding: '8px 14px', background: 'var(--sb-surface)', color: 'var(--sb-primary)' }, 'badge');
+add('label', 'Label', 'Etykieta', 'text', false, { text: 'Email address', for: '' }, { fontSize: 14, fontWeight: 600 }, 'tag');
+add('caption', 'Caption', 'Podpis', 'text', false, { text: 'A little detail that makes a big difference.' }, { fontSize: 13, color: 'var(--sb-muted)' }, 'type');
+add('image', 'Image', 'Obraz', 'media', false, { src: photo, alt: 'A bright, thoughtfully designed workspace', loading: 'lazy' }, { borderRadius: 16, overflow: 'hidden' }, 'image');
+add('gallery', 'Image gallery', 'Galeria zdjęć', 'media', true, { images: [photo, 'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1000&q=85'], columns: 3 }, { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 16 }, 'images');
+add('video', 'Video', 'Wideo', 'media', false, { src: '', poster: photo, controls: true, muted: true }, { width: '100%', borderRadius: 16, overflow: 'hidden' }, 'video');
+add('backgroundImage', 'Background image', 'Obraz tła', 'media', true, { src: photo, overlay: 0.45 }, { minHeight: 400, padding: 64, position: 'relative', overflow: 'hidden' }, 'image');
+add('icon', 'Icon', 'Ikona', 'media', false, { icon: 'sparkles', size: 28 }, { color: 'var(--sb-primary)' }, 'sparkles');
+add('svg', 'Vector icon', 'Grafika wektorowa', 'media', false, { icon: 'orbit', size: 64 }, { color: 'var(--sb-primary)' }, 'shapes');
+add('slider', 'Slider', 'Pokaz slajdów', 'media', true, { autoplay: false, interval: 5000 }, { position: 'relative', overflow: 'hidden', borderRadius: 16 }, 'gallery-horizontal');
+add('carousel', 'Carousel', 'Karuzela', 'media', true, { autoplay: true, interval: 6000 }, { position: 'relative', overflow: 'hidden', borderRadius: 16 }, 'gallery-horizontal');
+add('logo', 'Logo', 'Logo', 'media', false, { text: 'NOVA', href: '#', src: '' }, { fontSize: 24, fontWeight: 800, letterSpacing: '-0.06em' }, 'hexagon');
+add('avatar', 'Avatar', 'Awatar', 'media', false, { src: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=160&q=85', alt: 'Team member' }, { width: 56, height: 56, borderRadius: '50%', overflow: 'hidden' }, 'user');
+add('section', 'Section', 'Sekcja', 'layout', true, {}, { padding: '96px 24px' }, 'panel-top');
+add('container', 'Container', 'Kontener', 'layout', true, {}, { width: '100%', maxWidth: 1200, margin: '0 auto' }, 'square');
+add('grid', 'Grid', 'Siatka', 'layout', true, {}, { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 24 }, 'grid-3x3');
+add('flex', 'Flex', 'Flex', 'layout', true, {}, { display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }, 'columns-2');
+add('columns', 'Columns', 'Kolumny', 'layout', true, {}, { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 48 }, 'columns-2');
+add('row', 'Row', 'Wiersz', 'layout', true, {}, { display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }, 'rows-2');
+add('spacer', 'Spacer', 'Odstęp', 'layout', false, {}, { height: 48 }, 'move-vertical');
+add('divider', 'Divider', 'Separator', 'layout', false, {}, { height: 1, background: 'var(--sb-border)', margin: '24px 0' }, 'minus');
+add('card', 'Card', 'Karta', 'layout', true, {}, { padding: 32, border: '1px solid var(--sb-border)', borderRadius: 'var(--sb-radius)', background: 'var(--sb-surface)' }, 'square');
+add('stack', 'Stack', 'Stos', 'layout', true, {}, { display: 'flex', flexDirection: 'column', gap: 20 }, 'layers');
+add('wrapper', 'Wrapper', 'Obramowanie', 'layout', true, {}, {}, 'square-dashed');
+add('sticky', 'Sticky', 'Przyklejony blok', 'layout', true, {}, { position: 'sticky', top: 0, zIndex: 20 }, 'pin');
+add('button', 'Button', 'Przycisk', 'interactive', true, { text: 'Get started', href: '#contact', action: 'link' }, { padding: '14px 24px', borderRadius: 999, fontWeight: 700, background: 'var(--sb-primary)', color: '#0b0b13', border: '1px solid transparent' }, 'mouse-pointer-2');
+add('navbar', 'Navigation', 'Nawigacja', 'interactive', true, { brand: 'NOVA', links: [{ label: 'Features', href: '#features' }, { label: 'About', href: '#about' }, { label: 'Contact', href: '#contact' }] }, { padding: '20px 32px', borderBottom: '1px solid var(--sb-border)' }, 'menu');
+add('dropdown', 'Dropdown', 'Menu rozwijane', 'interactive', true, { text: 'Explore', items: [{ label: 'About', href: '#about' }, { label: 'Contact', href: '#contact' }] }, {}, 'chevron-down');
+add('accordion', 'Accordion', 'Akordeon', 'interactive', true, { title: 'How does it work?', text: 'Start with a clear idea. Customize every detail, then share it with the world.', open: false }, { padding: '20px 24px', borderBottom: '1px solid var(--sb-border)' }, 'list-collapse');
+add('tabs', 'Tabs', 'Zakładki', 'interactive', true, { tabs: [{ label: 'Overview', content: 'Everything you need, in one place.' }, { label: 'Details', content: 'Designed to adapt to your workflow.' }] }, {}, 'panels-top-left');
+add('tabPanel', 'Tab panel', 'Panel zakładki', 'interactive', true, { label: 'Overview' }, { padding: 24 }, 'panel-top');
+add('modal', 'Modal', 'Okno dialogowe', 'interactive', true, { title: 'Let’s talk', trigger: 'Open dialog' }, { padding: 32, maxWidth: 560, borderRadius: 24, background: 'var(--sb-surface)', color: 'var(--sb-text)' }, 'panel-top');
+add('tooltip', 'Tooltip', 'Podpowiedź', 'interactive', true, { text: 'More information', tip: 'A thoughtful detail, right when you need it.' }, {}, 'message-circle');
+add('popup', 'Popup', 'Popup', 'interactive', true, { title: 'Stay in the loop', delay: 10000, once: true }, { padding: 32, background: 'var(--sb-surface)', borderRadius: 24 }, 'message-square');
+add('search', 'Search', 'Wyszukiwarka', 'interactive', false, { placeholder: 'Search this page…', buttonText: 'Search' }, {}, 'search');
+add('contactForm', 'Contact form', 'Formularz kontaktowy', 'interactive', true, { formName: 'Contact', buttonText: 'Send message' }, { display: 'grid', gap: 16 }, 'mail');
+add('newsletterForm', 'Newsletter form', 'Newsletter', 'interactive', true, { formName: 'Newsletter', buttonText: 'Subscribe' }, { display: 'grid', gap: 16 }, 'mail-plus');
+add('loginForm', 'Login form (demo)', 'Logowanie (demo)', 'interactive', true, { formName: 'Login', buttonText: 'Sign in', notice: 'Authentication is not connected. Never enter a real password in this demo.' }, { display: 'grid', gap: 16 }, 'log-in');
+add('input', 'Input field', 'Pole formularza', 'interactive', false, { name: 'email', label: 'Email address', placeholder: 'you@example.com', inputType: 'email', required: true }, {}, 'text-cursor-input');
+add('textarea', 'Message field', 'Pole wiadomości', 'interactive', false, { name: 'message', label: 'Your message', placeholder: 'Tell us about your idea…', rows: 5, required: true }, {}, 'text-cursor-input');
+add('select', 'Select field', 'Pole wyboru', 'interactive', false, { name: 'service', label: 'Interested in', options: ['Design', 'Development', 'Strategy'] }, {}, 'list-filter');
+add('checkbox', 'Checkbox', 'Pole zgody', 'interactive', false, { name: 'consent', label: 'I agree to be contacted about my request.', required: true }, {}, 'check-square');
+add('productCard', 'Product card', 'Karta produktu', 'commerce', true, { name: 'Everyday essentials', price: 89, currency: 'USD', src: photo, productId: 'everyday-essentials' }, { padding: 20, borderRadius: 20, background: 'var(--sb-surface)', border: '1px solid var(--sb-border)' }, 'shopping-bag');
+add('productGrid', 'Product grid', 'Siatka produktów', 'commerce', true, {}, { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 24 }, 'grid-3x3');
+add('productGallery', 'Product gallery', 'Galeria produktu', 'commerce', true, { images: [photo], columns: 2 }, { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }, 'images');
+add('price', 'Price', 'Cena', 'commerce', false, { amount: 29, currency: 'USD', suffix: '/ month' }, { fontSize: 40, fontWeight: 700, letterSpacing: '-0.04em' }, 'banknote');
+add('cartButton', 'Add to cart', 'Dodaj do koszyka', 'commerce', false, { text: 'Add to bag', productId: 'product-1', productName: 'Everyday essentials', price: 89, currency: 'USD' }, { padding: '14px 24px', background: 'var(--sb-primary)', color: '#0b0b13', borderRadius: 999, fontWeight: 700 }, 'shopping-cart');
+add('categoryList', 'Product categories', 'Kategorie produktów', 'commerce', true, { items: [{ label: 'All products', href: '#products' }, { label: 'New arrivals', href: '#new' }, { label: 'Essentials', href: '#essentials' }] }, { display: 'flex', gap: 16, flexWrap: 'wrap' }, 'tags');
+add('productDetails', 'Product details', 'Szczegóły produktu', 'commerce', true, { title: 'Designed for your everyday', description: 'Beautiful materials. Exceptional attention to detail. Made to last.' }, { display: 'flex', flexDirection: 'column', gap: 24 }, 'package');
+add('checkout', 'Local cart / checkout', 'Koszyk / zamówienie', 'commerce', true, { title: 'Your bag', buttonText: 'Request order', notice: 'Order request only. No payment is collected.' }, { padding: 32, background: 'var(--sb-surface)', borderRadius: 24 }, 'credit-card');
+add('listItem', 'List item', 'Element listy', 'text', true, { text: 'A thoughtful detail' }, {}, 'list');
+add('stat', 'Statistic', 'Statystyka', 'text', true, { value: '98%', label: 'Customer satisfaction' }, {}, 'chart-no-axes-combined');
+add('rating', 'Rating', 'Ocena', 'text', false, { value: 5, max: 5, label: '5 out of 5' }, { color: 'var(--sb-primary)', letterSpacing: '0.2em' }, 'star');
+add('map', 'Map link', 'Mapa', 'media', false, { address: 'Warsaw, Poland', href: 'https://www.openstreetmap.org/', text: 'Find us on the map' }, { padding: 32, background: 'var(--sb-surface)', borderRadius: 16 }, 'map-pin');
+add('progress', 'Progress', 'Postęp', 'interactive', false, { value: 75, max: 100, label: 'Project progress' }, {}, 'chart-bar');
+add('countdown', 'Countdown', 'Odliczanie', 'interactive', false, { date: '2027-01-01T00:00:00Z', label: 'Launching soon' }, { fontSize: 32, fontWeight: 700 }, 'timer');
+add('socialLinks', 'Social links', 'Media społecznościowe', 'interactive', true, { links: [{ label: 'Instagram', href: 'https://instagram.com' }, { label: 'LinkedIn', href: 'https://linkedin.com' }] }, { display: 'flex', gap: 20 }, 'share-2');
+
+export const ELEMENTS: ElementDefinition[] = definitions;
+const byType = new Map(ELEMENTS.map(item => [item.type, item]));
+export function getElementDefinition(type: string): ElementDefinition | undefined { return byType.get(type); }
+export function elementSpec(type: string): NodeSpec {
+  const definition = getElementDefinition(type);
+  return definition ? { type, name: definition.label, props: structuredClone(definition.defaultProps), styles: structuredClone(definition.defaultStyles) } : { type, props: {}, styles: {} };
+}
