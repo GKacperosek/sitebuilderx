@@ -12,12 +12,12 @@ function origin(value: string, fallback: string) {
   if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('Invalid application URL');
   return parsed.origin;
 }
-const renderUrl = process.env.RENDER_EXTERNAL_URL || '';
+const platformUrl = process.env.RENDER_EXTERNAL_URL || process.env.RAILWAY_STATIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
 export const config = {
   production: process.env.NODE_ENV === 'production',
   port: Number(process.env.PORT || 4000),
-  appUrl: origin(process.env.APP_URL || renderUrl, 'http://localhost:5173'),
-  publicUrl: origin(process.env.PUBLIC_URL || renderUrl, 'http://localhost:4000'),
+  appUrl: origin(process.env.APP_URL || platformUrl, 'http://localhost:5173'),
+  publicUrl: origin(process.env.PUBLIC_URL || platformUrl, 'http://localhost:4000'),
   sessionDays: Math.min(90, Math.max(1, Number(process.env.SESSION_DAYS || 30))),
   uploads: path.join(serverRoot, 'storage/uploads'),
   webDist: path.resolve(serverRoot, '../web/dist'),

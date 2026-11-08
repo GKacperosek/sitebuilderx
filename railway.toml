@@ -1,0 +1,13 @@
+# Railway configuration — always-on Node service with managed PostgreSQL.
+# Add a PostgreSQL database in the Railway project and reference its DATABASE_URL
+# in the web service variables; Railway injects PORT and the public domain.
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm install --include=dev && npm run build"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
