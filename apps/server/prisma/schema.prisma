@@ -3,8 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Neon/Vercel: the runtime adapter uses the pooled `url`, while Prisma CLI
+  // (db push / migrate) connects through `directUrl` to bypass PgBouncer for DDL.
+  // On local dev both point at the same embedded Postgres instance.
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model User {
