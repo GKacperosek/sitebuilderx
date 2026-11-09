@@ -8,9 +8,13 @@ export const root = path.resolve(serverRoot, '../..');
 dotenv.config({ path: path.join(root, '.env') });
 
 function origin(value: string, fallback: string) {
-  const parsed = new URL(value || fallback);
-  if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('Invalid application URL');
-  return parsed.origin;
+  try {
+    const parsed = new URL(value || fallback);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return fallback;
+    return parsed.origin;
+  } catch {
+    return fallback;
+  }
 }
 const platformUrl = process.env.RENDER_EXTERNAL_URL || process.env.RAILWAY_STATIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
 export const config = {
@@ -29,4 +33,4 @@ export const config = {
   smtpPassword: process.env.SMTP_PASSWORD || '',
   smtpFrom: process.env.SMTP_FROM || '',
 };
-if (config.production && !config.appUrl.startsWith('https://')) throw new Error('APP_URL must use HTTPS in production');
+if (config.production && !config.appUrl.startsWith('https://')) console.warn('[config] APP_URL is not HTTPS. Set APP_URL to your public https URL (e.g. ${APP_URL} on DigitalOcean) for correct email links and origin checks. Continuing with same-origin CSRF fallback.');

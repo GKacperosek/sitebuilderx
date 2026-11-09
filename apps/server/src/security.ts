@@ -51,7 +51,9 @@ export function csrf(req: Request, _res: Response, next: NextFunction) {
   if (req.path.startsWith('/api/public/')) return next();
   let origin = req.get('origin');
   if (!origin && req.get('referer')) { try { origin = new URL(req.get('referer')!).origin; } catch { /* reject below */ } }
-  if (!origin || !isAllowedOrigin(origin) || req.get('sec-fetch-site') === 'cross-site') return next(new HttpError(403, 'Untrusted request origin', 'CSRF_REJECTED'));
+  const host = req.get('host');
+  const selfOrigin = host ? `${req.protocol}://${host}` : '';
+  if (!origin || !isAllowedOrigin(origin, selfOrigin ? [selfOrigin] : []) || req.get('sec-fetch-site') === 'cross-site') return next(new HttpError(403, 'Untrusted request origin', 'CSRF_REJECTED'));
   next();
 }
 export const apiLimit = rateLimit({ windowMs: 60000, limit: 240, standardHeaders: 'draft-8', legacyHeaders: false, message: { error: 'Too many requests', code: 'RATE_LIMITED' } });
