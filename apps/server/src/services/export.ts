@@ -1,7 +1,6 @@
 import archiver from 'archiver';
 import { createHash } from 'node:crypto';
 import { lookup } from 'node:dns/promises';
-import { readFile } from 'node:fs/promises';
 import https from 'node:https';
 import net from 'node:net';
 import path from 'node:path';
@@ -9,7 +8,7 @@ import type { Response } from 'express';
 import type { Project } from '@prisma/client';
 import { SITE_RUNTIME, renderPageHTML, safeURL } from '@sitebuilder/shared';
 import { parseDocument } from '../validation';
-import { config } from '../config';
+import { db } from '../db';
 import { HttpError } from '../security';
 import { assertOwnedAssets, referencedUploads } from './projects';
 import type { SiteDocument } from '@sitebuilder/shared';
@@ -74,7 +73,9 @@ export async function exportProject(project: Project, res: Response) {
   const uploads = [...referencedUploads(doc)];
   for (const filename of uploads) {
     if (!/^[a-f0-9-]{36}\.(png|jpg|gif|webp|svg)$/.test(filename)) throw new HttpError(400, 'Invalid uploaded asset reference');
-    files.set(`assets/${filename}`, await readFile(path.join(config.uploads, filename)).catch(() => { throw new HttpError(404, `Uploaded asset is missing: ${filename}`); }));
+    const asset = await db.mediaAsset.findUnique({ where: { filename }, select: { data: true } });
+    if (!asset?.data) throw new HttpError(404, `Uploaded asset is missing: ${filename}`);
+    files.set(`assets/${filename}`, Buffer.from(asset.data));
   }
 
   const remote = new Map<string, string>();

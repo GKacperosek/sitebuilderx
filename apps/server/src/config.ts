@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const here = path.dirname(fileURLToPath(import.meta.url));
-export const serverRoot = path.resolve(here, '..');
-export const root = path.resolve(serverRoot, '../..');
+// Resolve from the working directory (the repo root on every host) instead of
+// import.meta.url, which is not reliable inside bundled serverless functions.
+export const root = process.cwd();
+export const serverRoot = path.resolve(root, 'apps/server');
 dotenv.config({ path: path.join(root, '.env') });
 
 function origin(value: string, fallback: string) {
@@ -16,7 +16,8 @@ function origin(value: string, fallback: string) {
     return fallback;
   }
 }
-const platformUrl = process.env.RENDER_EXTERNAL_URL || process.env.RAILWAY_STATIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
+const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || '';
+const platformUrl = (vercelHost ? `https://${vercelHost}` : '') || process.env.RENDER_EXTERNAL_URL || process.env.RAILWAY_STATIC_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
 export const config = {
   production: process.env.NODE_ENV === 'production',
   port: Number(process.env.PORT || 4000),

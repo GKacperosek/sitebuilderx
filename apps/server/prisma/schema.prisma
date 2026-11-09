@@ -92,6 +92,7 @@ model MediaAsset {
   filename  String @unique
   mimeType  String
   size      Int
+  data      Bytes?
   folder    String @default("")
   createdAt DateTime @default(now())
   @@index([userId, folder])

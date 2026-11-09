@@ -2,8 +2,6 @@ import { Router } from 'express';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
-import { unlink } from 'node:fs/promises';
-import path from 'node:path';
 import { db, activity, json } from '../db';
 import { config } from '../config';
 import { auth, authLimit, createSession, cookieName, cookieOptions, hashToken, token, HttpError } from '../security';
@@ -103,11 +101,9 @@ accountRoutes.patch('/', async (req, res) => {
 accountRoutes.delete('/', authLimit, async (req, res) => {
   const { password } = z.object({ password: z.string().min(1).max(200) }).strict().parse(req.body);
   if (!await bcrypt.compare(password, req.user!.passwordHash)) throw new HttpError(403, 'Password is incorrect', 'INVALID_PASSWORD');
-  const assets = await db.mediaAsset.findMany({ where: { userId: req.user!.id }, select: { filename: true } });
   await db.$transaction(async tx => {
     const removed = await tx.user.deleteMany({ where: { id: req.user!.id, passwordHash: req.user!.passwordHash } });
     if (!removed.count) throw new HttpError(409, 'Account changed; sign in again');
   });
-  await Promise.all(assets.map(a => unlink(path.join(config.uploads, a.filename)).catch(() => undefined)));
   res.clearCookie(cookieName, cookieOptions).json({ success: true });
 });
