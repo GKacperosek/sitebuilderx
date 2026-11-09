@@ -1,7 +1,8 @@
-import { app } from '../apps/server/src/app';
+import { app } from '../apps/server/dist-vercel/app.js';
 
-// Vercel Serverless Function entry point. The Express app is a (req, res) request
-// listener, which is exactly the handler signature the Vercel Node runtime invokes.
-// Platform routing (vercel.json) forwards /api/*, /uploads/* and /sites/* here while
-// the built SPA is served statically. No app.listen() runs in the serverless environment.
+// Vercel Serverless Function entry point. The Express app is pre-bundled into a single
+// self-contained ESM file by `npm run build:vercel` (tsup) during the Vercel build,
+// because the Vercel Node runtime does not transpile extensionless local .ts imports.
+// Importing the emitted .js with an explicit extension resolves cleanly at runtime.
+// The Express app is a (req, res) listener, exactly the handler signature Vercel invokes.
 export default app;

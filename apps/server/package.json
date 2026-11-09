@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup"
+    "build": "tsup",
+    "build:vercel": "tsup --config tsup.vercel.config.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

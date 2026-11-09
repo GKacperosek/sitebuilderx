@@ -14,6 +14,7 @@
     "db:generate": "prisma generate --schema apps/server/prisma/schema.prisma",
     "db:push": "prisma db push --schema apps/server/prisma/schema.prisma --skip-generate",
     "build": "npm run db:generate && npm run build -w @sitebuilder/web && npm run build -w @sitebuilder/server",
+    "build:vercel": "npm run build:vercel -w @sitebuilder/server",
     "start": "npm run db:push && node apps/server/dist/index.js",
     "typecheck": "tsc --noEmit -p packages/shared && tsc --noEmit -p apps/server && tsc --noEmit -p apps/web",
     "test": "tsx --test packages/shared/src/*.test.ts apps/server/src/*.test.ts"
