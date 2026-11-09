@@ -1,5 +1,5 @@
-import type { SiteTheme } from './types';
-import { DEFAULT_THEME } from './tree';
+import type { SiteTheme } from './types.js';
+import { DEFAULT_THEME } from './tree.js';
 
 export const THEMES: SiteTheme[] = [
   structuredClone(DEFAULT_THEME),

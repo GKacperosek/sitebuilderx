@@ -1,6 +1,6 @@
-import type { SiteDocument, SiteNode, StyleMap } from './types';
-import { ELEMENTS, getElementDefinition } from './elements';
-import { cssValue, safeToken, styleDeclarations } from './safety';
+import type { SiteDocument, SiteNode, StyleMap } from './types.js';
+import { ELEMENTS, getElementDefinition } from './elements.js';
+import { cssValue, safeToken, styleDeclarations } from './safety.js';
 
 export const BASE_CSS = `
 *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}button,input,textarea,select{font:inherit}button,a,input,textarea,select,summary{touch-action:manipulation}button,summary{cursor:pointer}button{border:0}a{color:inherit;text-decoration:none}img,video{display:block;max-width:100%;height:auto}figure,blockquote,p,h1,h2,h3,h4,h5,h6{margin:0}input,textarea,select{min-width:0;width:100%;padding:14px 16px;background:var(--sb-bg);color:var(--sb-text);border:1px solid var(--sb-border);border-radius:10px}textarea{resize:vertical}input[type=checkbox]{width:auto}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--sb-secondary);outline-offset:4px}[hidden]{display:none!important}

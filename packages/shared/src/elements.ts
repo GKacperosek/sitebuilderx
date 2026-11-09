@@ -1,4 +1,4 @@
-import type { ElementCategory, ElementDefinition, NodeProps, NodeSpec, StyleMap } from './types';
+import type { ElementCategory, ElementDefinition, NodeProps, NodeSpec, StyleMap } from './types.js';
 
 const photo = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85';
 const definitions: ElementDefinition[] = [];

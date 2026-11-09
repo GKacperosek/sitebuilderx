@@ -1,8 +1,8 @@
-import type { SiteDocument, SiteTemplate } from '../types';
-import { descendants, documentFromSpecs, emptyPage, instantiateSpec } from '../tree';
-import { elementSpec } from '../elements';
-import { THEMES } from '../themes';
-import { buildSection, navbar, hero, features, pricing, testimonials, faq, team, about, contact, portfolio, services, statistics, timeline, partners, newsletter, footer, blog, cta, products, PHOTO, L, type SectionContent } from './sections';
+import type { SiteDocument, SiteTemplate } from '../types.js';
+import { descendants, documentFromSpecs, emptyPage, instantiateSpec } from '../tree.js';
+import { elementSpec } from '../elements.js';
+import { THEMES } from '../themes.js';
+import { buildSection, navbar, hero, features, pricing, testimonials, faq, team, about, contact, portfolio, services, statistics, timeline, partners, newsletter, footer, blog, cta, products, PHOTO, L, type SectionContent } from './sections.js';
 export const TEMPLATE_CATEGORIES = ['Gaming', 'Business', 'Portfolio', 'Technology', 'SaaS', 'E-commerce', 'Restaurant', 'Blog', 'Agency', 'Education', 'Personal', 'Landing Page', 'News', 'Fitness', 'Travel'];
 interface Seed { id: string; name: string; category: string; theme: number; hero: 'split' | 'center' | 'editorial' | 'immersive' | 'minimal' | 'product'; brand: string; title: [string, string]; subtitle: [string, string]; description: [string, string]; image: string; extra: string[]; featured?: boolean; tags: string[]; }
 const seeds: Seed[] = [

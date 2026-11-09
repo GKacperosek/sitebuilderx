@@ -6,8 +6,8 @@ import {
   removeNode, moveNode, nodeToSpec, effectiveStyles, topLevelSelection, validateDocumentStructure,
   escapeHTML, safeURL, safeToken, safeJSON, sanitizeRichText, cssValue, cssProperty, styleDeclarations, assetURL,
   generateCSS, buildCSS, renderPageHTML, renderNodeHTML, renderElement, getElementDefinition,
-} from './index';
-import type { NodeSpec, SiteDocument } from './types';
+} from './index.js';
+import type { NodeSpec, SiteDocument } from './types.js';
 
 const heading = (text: string, level = 2): NodeSpec => ({ type: 'heading', props: { text, level } });
 const section = (children: NodeSpec[]): NodeSpec => ({ type: 'section', children });

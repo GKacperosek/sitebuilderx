@@ -1,8 +1,8 @@
-import type { SiteDocument, SiteNode, VNode } from './types';
-import { getElementDefinition } from './elements';
-import { assetURL, escapeHTML, safeJSON, safeToken, safeURL, sanitizeRichText } from './safety';
-import { buildCSS } from './styles';
-import { SITE_RUNTIME } from './runtime';
+import type { SiteDocument, SiteNode, VNode } from './types.js';
+import { getElementDefinition } from './elements.js';
+import { assetURL, escapeHTML, safeJSON, safeToken, safeURL, sanitizeRichText } from './safety.js';
+import { buildCSS } from './styles.js';
+import { SITE_RUNTIME } from './runtime.js';
 
 export interface RenderOptions { assetBase?: string; formEndpoint?: string; analyticsEndpoint?: string; siteName?: string; includeRuntime?: boolean; exportMode?: boolean }
 const slot = (): { slot: true } => ({ slot: true });

@@ -1,6 +1,6 @@
-import type { LibraryItem, NodeSpec, StyleMap, ElementCategory } from '../types';
-import { elementSpec } from '../elements';
-import { node, PHOTO, heading, paragraph, button, image, card, stack, row, grid } from './sections';
+import type { LibraryItem, NodeSpec, StyleMap, ElementCategory } from '../types.js';
+import { elementSpec } from '../elements.js';
+import { node, PHOTO, heading, paragraph, button, image, card, stack, row, grid } from './sections.js';
 function preset(id: string, name: string, namePl: string, category: ElementCategory, type: string, description: string, props: Record<string, any> = {}, styles: StyleMap = {}, children: NodeSpec[] = [], tags: string[] = []): LibraryItem {
   const base = elementSpec(type); return { id, name, namePl, category, type, description, tags: [type, ...tags], spec: { ...base, name, props: { ...base.props, ...props }, styles: { ...base.styles, ...styles }, children } };
 }

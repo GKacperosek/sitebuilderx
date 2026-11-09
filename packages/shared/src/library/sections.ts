@@ -1,5 +1,5 @@
-import type { LibraryItem, NodeSpec, StyleMap } from '../types';
-import { elementSpec } from '../elements';
+import type { LibraryItem, NodeSpec, StyleMap } from '../types.js';
+import { elementSpec } from '../elements.js';
 export type Lang = 'pl' | 'en';
 export const L = (language: Lang, en: string, pl: string) => language === 'pl' ? pl : en;
 export function node(type: string, props: Record<string, any> = {}, styles: StyleMap = {}, children: NodeSpec[] = [], name?: string): NodeSpec {

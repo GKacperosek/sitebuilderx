@@ -1,4 +1,4 @@
-import type { Device, NodeSpec, SiteDocument, SiteNode, SitePage, SiteTheme, StyleMap } from './types';
+import type { Device, NodeSpec, SiteDocument, SiteNode, SitePage, SiteTheme, StyleMap } from './types.js';
 export const uid = () => crypto.randomUUID();
 export const DEFAULT_THEME: SiteTheme = { name: 'Midnight', colors: { background: '#0b0b13', surface: '#141421', text: '#f4f4fa', muted: '#9898ad', primary: '#a78bfa', secondary: '#38bdf8', border: '#2c2c40' }, fontFamily: 'DM Sans', headingFont: 'Space Grotesk', radius: 16 };
 export const emptyPage = (name = 'Home', slug = ''): SitePage => ({ id: uid(), name, slug, rootIds: [], seo: { title: name, description: '', keywords: '', ogImage: '', noindex: false } });
